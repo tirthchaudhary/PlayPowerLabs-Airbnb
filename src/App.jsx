@@ -4,13 +4,33 @@ import { Header } from "./components/Header";
 import { PropertyHeader } from "./components/PropertyHeader";
 import { HeroGrid } from "./components/HeroGrid";
 import { ListingDetails } from "./components/ListingDetails";
+import { ImagesScrollable } from "./components/ImagesScrollable";
 import { mockListing } from "./data/listingData";
 
 function App() {
   const [isPhotoTourOpen, setIsPhotoTourOpen] = useState(false);
   const [isLightboxOpen, setIsLightboxOpen] = useState(false);
   const [headerVisible, setHeaderVisible] = useState(false);
+  const [isPhotoTourRoute, setIsPhotoTourRoute] = useState(() => window.location.pathname === '/photo-tour');
   const heroRef = useRef(null);
+
+  const openPhotoTour = () => {
+    window.history.pushState({}, '', '/photo-tour');
+    setIsPhotoTourRoute(true);
+    window.scrollTo(0, 0);
+  };
+
+  const closePhotoTour = () => {
+    window.history.pushState({}, '', '/');
+    setIsPhotoTourRoute(false);
+    window.scrollTo(0, 0);
+  };
+
+  useEffect(() => {
+    const handlePopState = () => setIsPhotoTourRoute(window.location.pathname === '/photo-tour');
+    window.addEventListener('popstate', handlePopState);
+    return () => window.removeEventListener('popstate', handlePopState);
+  }, []);
 
   // Show header with fade once the hero photo grid scrolls out of view
   useEffect(() => {
@@ -28,21 +48,22 @@ function App() {
 
   return (
     <div style={{ minHeight: '100vh', backgroundColor: '#FFFFFF' }}>
+      {isPhotoTourRoute ? <ImagesScrollable photos={mockListing.photos} onBack={closePhotoTour} /> : <>
       {/* Full Width Navbar */}
       <Header scrolledPast={headerVisible} />
 
       {/* Main Listing Container */}
       <main style={{ maxWidth: '1120px', margin: '0 auto', padding: '0 24px' }}>
         {/* Spacer: fills header height when it becomes fixed so content doesn't jump */}
-        {headerVisible && <div style={{ height: '96px' }} aria-hidden="true" />}
+        {headerVisible && <div style={{ height: '80px' }} aria-hidden="true" />}
         {/* Title, Share & Save Bar */}
         <PropertyHeader property={mockListing} />
 
         {/* 5-Photo Gallery Grid — observed for scroll-aware header */}
-        <div ref={heroRef}>
+        <div id="photos" ref={heroRef}>
           <HeroGrid
             photos={mockListing.photos}
-            onOpenPhotoTour={() => setIsPhotoTourOpen(true)}
+            onOpenPhotoTour={openPhotoTour}
             onOpenLightbox={(index) => console.log('Open Lightbox at index', index)}
           />
         </div>
@@ -50,6 +71,7 @@ function App() {
         {/* Listing information and booking panel */}
         <ListingDetails />
       </main>
+      </>}
     </div>
   );
 }

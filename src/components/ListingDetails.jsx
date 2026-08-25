@@ -1,5 +1,11 @@
 import React, { useState } from 'react';
 import '../styles/ListingDetails.css';
+import { mockListing } from '../data/listingData';
+import { Review } from './Review';
+import { Map } from './Map';
+import { Host } from './Host';
+import { Lower, NearbyStays } from './Lower';
+// using external Unsplash images for the "Where you'll sleep" section
 
 const Icon = ({ children, size = 24 }) => (
   <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">{children}</svg>
@@ -9,35 +15,6 @@ const Snowflake = () => <Icon><path d="M12 2v20M4.9 6l14.2 12M4.9 18 19.1 6M2 12
 const Key = () => <Icon><circle cx="8" cy="15" r="4" /><path d="m11 12 8-8M15 8l2 2M17 6l2 2" /></Icon>;
 const Outdoor = () => <Icon><path d="M4 20h16v-6H4v6Z" /><path d="M7 14c0-4 2.3-7 5-9 2.7 2 5 5 5 9M12 5v9M9 10l3 2 3-2" /></Icon>;
 const Gift = () => <Icon size={21}><rect x="3" y="8" width="18" height="13" rx="2" /><path d="M12 8v13M3 12h18M12 8H7.5a2.5 2.5 0 1 1 2.5-3.5L12 8Zm0 0h4.5A2.5 2.5 0 1 0 14 4.5L12 8Z" /></Icon>;
-
-// Laurel wreath SVG — filled leaf shapes matching the Airbnb Guest favourite badge
-const LaurelLeft = () => (
-  <svg width="30" height="44" viewBox="0 0 30 44" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-    {/* Stem */}
-    <path d="M15 42 C15 34 15 26 15 10" stroke="#222" strokeWidth="1.1" strokeLinecap="round" fill="none"/>
-    {/* Leaf 1 – bottom */}
-    <path d="M15 38 C11 35 5 31 5 25 C10 27 15 32 15 38Z" fill="#222"/>
-    {/* Leaf 2 */}
-    <path d="M15 31 C11 27 5 22 6 15 C11 18 15 24 15 31Z" fill="#222"/>
-    {/* Leaf 3 */}
-    <path d="M15 23 C12 18 9 12 12 6 C15 9 16 16 15 23Z" fill="#222"/>
-    {/* Leaf 4 – top */}
-    <path d="M15 15 C14 11 15 6 19 3 C19 7 17 12 15 15Z" fill="#222"/>
-    {/* Small berry at bottom */}
-    <circle cx="15" cy="41" r="1.5" fill="#222"/>
-  </svg>
-);
-
-const LaurelRight = () => (
-  <svg width="30" height="44" viewBox="0 0 30 44" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" style={{ transform: 'scaleX(-1)' }}>
-    <path d="M15 42 C15 34 15 26 15 10" stroke="#222" strokeWidth="1.1" strokeLinecap="round" fill="none"/>
-    <path d="M15 38 C11 35 5 31 5 25 C10 27 15 32 15 38Z" fill="#222"/>
-    <path d="M15 31 C11 27 5 22 6 15 C11 18 15 24 15 31Z" fill="#222"/>
-    <path d="M15 23 C12 18 9 12 12 6 C15 9 16 16 15 23Z" fill="#222"/>
-    <path d="M15 15 C14 11 15 6 19 3 C19 7 17 12 15 15Z" fill="#222"/>
-    <circle cx="15" cy="41" r="1.5" fill="#222"/>
-  </svg>
-);
 
 function GuestControl() {
   const [guests, setGuests] = useState(2);
@@ -115,37 +92,179 @@ function ListingDescription() {
   );
 }
 
-
-export const ListingDetails = () => <section className="listing-details">
-  <div className="listing-main">
-    <h2>Entire serviced apartment in Candolim, India</h2>
-    <p className="listing-summary">3 guests · 1 bedroom · 1 bed · 1 bathroom</p>
-    <div className="guest-favourite">
-      <div className="guest-fav-badge">
-        <LaurelLeft />
-        <div className="guest-fav-badge-text">
-          <span>Guest</span>
-          <span>favourite</span>
+function WhereYoullSleep() {
+  return (
+    <div className="where-sleep">
+      <h3>Where you'll sleep</h3>
+      <div className="sleep-grid">
+        <div className="sleep-card">
+          <div className="sleep-image">
+            <img src="https://images.unsplash.com/photo-1616594039964-ae9021a400a0?auto=format&fit=crop&w=800&q=80" alt="Bedroom" />
+          </div>
+          <div className="sleep-rule" />
+          <div className="sleep-meta">
+            <h4>Bedroom</h4>
+            <p>1 double bed</p>
+          </div>
         </div>
-        <LaurelRight />
-      </div>
-      <p className="guest-fav-desc">One of the most loved homes on Airbnb,<br />according to guests</p>
-      <div className="favourite-score">
-        <b>4.95</b>
-        <span>★★★★★</span>
-      </div>
-      <div className="favourite-divider" />
-      <div className="favourite-reviews">
-        <b>19</b>
-        <span>Reviews</span>
+        <div className="sleep-card">
+          <div className="sleep-image">
+            <img src="https://images.unsplash.com/photo-1616594039964-ae9021a400a0?auto=format&fit=crop&w=800&q=80" alt="Living room" />
+          </div>
+          <div className="sleep-rule" />
+          <div className="sleep-meta">
+            <h4>Living room</h4>
+            <p>1 sofa</p>
+          </div>
+        </div>
       </div>
     </div>
+  );
+}
+
+function AmenitiesSection() {
+  const items = mockListing.amenities.slice(0, 8);
+  return (
+    <div id="amenities" className="amenities">
+      <h3>What this place offers</h3>
+      <div className="amenities-grid">
+        {items.map((a) => (
+          <div className="amenity-item" key={a.id}>
+            <svg className="amenity-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="3"/><path d="M21 21l-4.35-4.35"/></svg>
+            <div className="amenity-text">{a.name}</div>
+          </div>
+        ))}
+      </div>
+      <button className="amenities-button">Show all {mockListing.amenities.length} amenities</button>
+    </div>
+  );
+}
+
+function CalendarSection() {
+  return (
+    <div className="calendar-section">
+      <h3>5 nights in Candolim</h3>
+      <p className="calendar-sub">18 Oct 2026 - 23 Oct 2026</p>
+      <div className="calendar-months">
+        <div className="cal-month">
+          <div className="cal-month-header">October 2026</div>
+          <div className="cal-grid">
+            <div className="cal-weeknames">S</div><div className="cal-weeknames">M</div><div className="cal-weeknames">T</div><div className="cal-weeknames">W</div><div className="cal-weeknames">T</div><div className="cal-weeknames">F</div><div className="cal-weeknames">S</div>
+            {/* leading blanks */}
+            <div className="cal-day empty" />
+            <div className="cal-day empty" />
+            <div className="cal-day empty" />
+            <div className="cal-day">1</div>
+            <div className="cal-day">2</div>
+            <div className="cal-day">3</div>
+            <div className="cal-day">4</div>
+
+            <div className="cal-day">5</div>
+            <div className="cal-day">6</div>
+            <div className="cal-day">7</div>
+            <div className="cal-day">8</div>
+            <div className="cal-day">9</div>
+            <div className="cal-day">10</div>
+            <div className="cal-day">11</div>
+
+            <div className="cal-day">12</div>
+            <div className="cal-day">13</div>
+            <div className="cal-day">14</div>
+            <div className="cal-day">15</div>
+            <div className="cal-day">16</div>
+            <div className="cal-day">17</div>
+            <div className="cal-day cal-day--start">18</div>
+
+            <div className="cal-day cal-day--inrange">19</div>
+            <div className="cal-day cal-day--inrange">20</div>
+            <div className="cal-day cal-day--inrange">21</div>
+            <div className="cal-day cal-day--inrange">22</div>
+            <div className="cal-day cal-day--end">23</div>
+            <div className="cal-day">24</div>
+
+            <div className="cal-day">25</div>
+            <div className="cal-day">26</div>
+            <div className="cal-day">27</div>
+            <div className="cal-day">28</div>
+            <div className="cal-day">29</div>
+            <div className="cal-day">30</div>
+            <div className="cal-day">31</div>
+          </div>
+        </div>
+
+        <div className="cal-month">
+          <div className="cal-month-header">November 2026</div>
+          <div className="cal-grid">
+            <div className="cal-weeknames">S</div><div className="cal-weeknames">M</div><div className="cal-weeknames">T</div><div className="cal-weeknames">W</div><div className="cal-weeknames">T</div><div className="cal-weeknames">F</div><div className="cal-weeknames">S</div>
+            {/* Nov days (sparse preview) */}
+            <div className="cal-day">1</div>
+            <div className="cal-day">2</div>
+            <div className="cal-day">3</div>
+            <div className="cal-day">4</div>
+            <div className="cal-day">5</div>
+            <div className="cal-day">6</div>
+
+            <div className="cal-day">7</div>
+            <div className="cal-day">8</div>
+            <div className="cal-day">9</div>
+            <div className="cal-day">10</div>
+            <div className="cal-day">11</div>
+            <div className="cal-day">12</div>
+            <div className="cal-day">13</div>
+
+            <div className="cal-day">14</div>
+            <div className="cal-day">15</div>
+            <div className="cal-day">16</div>
+            <div className="cal-day">17</div>
+            <div className="cal-day">18</div>
+            <div className="cal-day">19</div>
+            <div className="cal-day">20</div>
+
+            <div className="cal-day cal-muted">21</div>
+            <div className="cal-day cal-muted">22</div>
+            <div className="cal-day cal-muted">23</div>
+            <div className="cal-day cal-muted">24</div>
+            <div className="cal-day cal-muted">25</div>
+            <div className="cal-day cal-muted">26</div>
+            <div className="cal-day cal-muted">27</div>
+          </div>
+        </div>
+      </div>
+
+      <div className="calendar-actions">
+        <button className="cal-clear">Clear dates</button>
+      </div>
+    </div>
+  );
+}
+
+
+export const ListingDetails = () => <section className="listing-details">
+  <div className="listing-layout">
+    <div className="listing-main">
+    <h2>Entire serviced apartment in Candolim, India</h2>
+    <p className="listing-summary">3 guests · 1 bedroom · 1 bed · 1 bathroom</p>
     <div className="host-row"><div className="host-avatar">M</div><div><b>Hosted by Mirashya Homes</b><span>2 years hosting</span></div></div>
     <div className="details-divider" />
     <div className="highlights">
       {highlights.map(([HighlightIcon, title, description]) => <div className="highlight" key={title}><HighlightIcon /><div><h3>{title}</h3><p>{description}</p></div></div>)}
     </div>
     <ListingDescription />
+    <WhereYoullSleep />
+    <AmenitiesSection />
+    <div className="details-divider" />
+    <CalendarSection />
+    </div>
+    <BookingCard />
   </div>
-  <BookingCard />
+  <div className="details-divider details-divider--full" />
+  <Review />
+  <div className="details-divider details-divider--full" />
+  <Map />
+  <div className="details-divider details-divider--full" />
+  <Host />
+  <div className="details-divider details-divider--full" />
+  <Lower />
+  <div className="details-divider details-divider--full" />
+  <NearbyStays />
 </section>;
