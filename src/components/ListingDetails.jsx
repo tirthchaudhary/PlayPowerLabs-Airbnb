@@ -5,6 +5,8 @@ import { Review } from './Review';
 import { Map } from './Map';
 import { Host } from './Host';
 import { Lower, NearbyStays } from './Lower';
+import { AmenityIcon } from './AmenityIcon';
+import { AmenitiesModal } from './AmenitiesModal';
 // using external Unsplash images for the "Where you'll sleep" section
 
 const Icon = ({ children, size = 24 }) => (
@@ -92,12 +94,20 @@ function ListingDescription() {
   );
 }
 
-function WhereYoullSleep() {
+function WhereYoullSleep({ onOpenPhotoTour }) {
   return (
     <div className="where-sleep">
       <h3>Where you'll sleep</h3>
       <div className="sleep-grid">
-        <div className="sleep-card">
+        <div
+          className="sleep-card"
+          onClick={() => onOpenPhotoTour && onOpenPhotoTour('bedroom')}
+          style={{ cursor: 'pointer' }}
+          role="button"
+          tabIndex={0}
+          onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') onOpenPhotoTour && onOpenPhotoTour('bedroom'); }}
+          aria-label="View Bedroom photos in photo tour"
+        >
           <div className="sleep-image">
             <img src="https://images.unsplash.com/photo-1616594039964-ae9021a400a0?auto=format&fit=crop&w=800&q=80" alt="Bedroom" />
           </div>
@@ -107,9 +117,17 @@ function WhereYoullSleep() {
             <p>1 double bed</p>
           </div>
         </div>
-        <div className="sleep-card">
+        <div
+          className="sleep-card"
+          onClick={() => onOpenPhotoTour && onOpenPhotoTour('living-1')}
+          style={{ cursor: 'pointer' }}
+          role="button"
+          tabIndex={0}
+          onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') onOpenPhotoTour && onOpenPhotoTour('living-1'); }}
+          aria-label="View Living room photos in photo tour"
+        >
           <div className="sleep-image">
-            <img src="https://images.unsplash.com/photo-1616594039964-ae9021a400a0?auto=format&fit=crop&w=800&q=80" alt="Living room" />
+            <img src="https://images.unsplash.com/photo-1613977257363-707ba9348227?auto=format&fit=crop&w=800&q=80" alt="Living room" />
           </div>
           <div className="sleep-rule" />
           <div className="sleep-meta">
@@ -123,19 +141,38 @@ function WhereYoullSleep() {
 }
 
 function AmenitiesSection() {
-  const items = mockListing.amenities.slice(0, 8);
+  const [isAmenitiesOpen, setIsAmenitiesOpen] = useState(false);
+  const items = mockListing.amenities.slice(0, 10);
+  const totalCount = mockListing.amenityCategories
+    ? mockListing.amenityCategories.reduce((acc, cat) => acc + cat.items.length, 0)
+    : mockListing.amenities.length;
+
   return (
     <div id="amenities" className="amenities">
       <h3>What this place offers</h3>
       <div className="amenities-grid">
         {items.map((a) => (
           <div className="amenity-item" key={a.id}>
-            <svg className="amenity-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="3"/><path d="M21 21l-4.35-4.35"/></svg>
+            <div className="amenity-icon">
+              <AmenityIcon name={a.icon} size={24} />
+            </div>
             <div className="amenity-text">{a.name}</div>
           </div>
         ))}
       </div>
-      <button className="amenities-button">Show all {mockListing.amenities.length} amenities</button>
+      <button
+        className="amenities-button"
+        onClick={() => setIsAmenitiesOpen(true)}
+      >
+        Show all {totalCount} amenities
+      </button>
+
+      {isAmenitiesOpen && (
+        <AmenitiesModal
+          categories={mockListing.amenityCategories}
+          onClose={() => setIsAmenitiesOpen(false)}
+        />
+      )}
     </div>
   );
 }
@@ -239,7 +276,7 @@ function CalendarSection() {
 }
 
 
-export const ListingDetails = () => <section className="listing-details">
+export const ListingDetails = ({ onOpenPhotoTour }) => <section className="listing-details">
   <div className="listing-layout">
     <div className="listing-main">
     <h2>Entire serviced apartment in Candolim, India</h2>
@@ -250,7 +287,7 @@ export const ListingDetails = () => <section className="listing-details">
       {highlights.map(([HighlightIcon, title, description]) => <div className="highlight" key={title}><HighlightIcon /><div><h3>{title}</h3><p>{description}</p></div></div>)}
     </div>
     <ListingDescription />
-    <WhereYoullSleep />
+    <WhereYoullSleep onOpenPhotoTour={onOpenPhotoTour} />
     <AmenitiesSection />
     <div className="details-divider" />
     <CalendarSection />

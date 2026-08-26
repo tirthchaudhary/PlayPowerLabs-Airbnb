@@ -1,33 +1,47 @@
-import React, { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import './App.css';
 import { Header } from "./components/Header";
 import { PropertyHeader } from "./components/PropertyHeader";
 import { HeroGrid } from "./components/HeroGrid";
 import { ListingDetails } from "./components/ListingDetails";
 import { ImagesScrollable } from "./components/ImagesScrollable";
+import { Lightbox } from "./components/Lightbox";
 import { mockListing } from "./data/listingData";
 
 function App() {
-  const [isPhotoTourOpen, setIsPhotoTourOpen] = useState(false);
-  const [isLightboxOpen, setIsLightboxOpen] = useState(false);
+  const [lightboxIndex, setLightboxIndex] = useState(null);
   const [headerVisible, setHeaderVisible] = useState(false);
   const [isPhotoTourRoute, setIsPhotoTourRoute] = useState(() => window.location.pathname === '/photo-tour');
+  const [initialTourCategory, setInitialTourCategory] = useState(() => {
+    if (window.location.pathname === '/photo-tour' && window.location.hash) {
+      return window.location.hash.replace('#', '');
+    }
+    return null;
+  });
   const heroRef = useRef(null);
 
-  const openPhotoTour = () => {
-    window.history.pushState({}, '', '/photo-tour');
+  const openPhotoTour = (targetCategory = null) => {
+    const hash = targetCategory ? `#${targetCategory}` : '';
+    window.history.pushState({}, '', `/photo-tour${hash}`);
+    setInitialTourCategory(targetCategory);
     setIsPhotoTourRoute(true);
-    window.scrollTo(0, 0);
   };
 
   const closePhotoTour = () => {
     window.history.pushState({}, '', '/');
+    setInitialTourCategory(null);
     setIsPhotoTourRoute(false);
     window.scrollTo(0, 0);
   };
 
   useEffect(() => {
-    const handlePopState = () => setIsPhotoTourRoute(window.location.pathname === '/photo-tour');
+    const handlePopState = () => {
+      const isTour = window.location.pathname === '/photo-tour';
+      setIsPhotoTourRoute(isTour);
+      if (isTour && window.location.hash) {
+        setInitialTourCategory(window.location.hash.replace('#', ''));
+      }
+    };
     window.addEventListener('popstate', handlePopState);
     return () => window.removeEventListener('popstate', handlePopState);
   }, []);
@@ -48,7 +62,13 @@ function App() {
 
   return (
     <div style={{ minHeight: '100vh', backgroundColor: '#FFFFFF' }}>
-      {isPhotoTourRoute ? <ImagesScrollable photos={mockListing.photos} onBack={closePhotoTour} /> : <>
+      {isPhotoTourRoute ? (
+        <ImagesScrollable
+          photos={mockListing.photos}
+          onBack={closePhotoTour}
+          initialCategory={initialTourCategory}
+        />
+      ) : <>
       {/* Full Width Navbar */}
       <Header scrolledPast={headerVisible} />
 
@@ -64,13 +84,13 @@ function App() {
           <HeroGrid
             photos={mockListing.photos}
             onOpenPhotoTour={openPhotoTour}
-            onOpenLightbox={(index) => console.log('Open Lightbox at index', index)}
           />
         </div>
 
         {/* Listing information and booking panel */}
-        <ListingDetails />
+        <ListingDetails onOpenPhotoTour={openPhotoTour} />
       </main>
+      {lightboxIndex !== null && <Lightbox photos={mockListing.photos} activeIndex={lightboxIndex} onClose={() => setLightboxIndex(null)} onChange={setLightboxIndex} />}
       </>}
     </div>
   );

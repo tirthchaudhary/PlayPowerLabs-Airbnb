@@ -1,6 +1,23 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 
 export const Header = ({ scrolledPast = false }) => {
+    const [activeSection, setActiveSection] = useState('photos');
+
+    useEffect(() => {
+        if (!scrolledPast) return undefined;
+        const sections = ['photos', 'amenities', 'reviews', 'location']
+            .map((id) => document.getElementById(id))
+            .filter(Boolean);
+        const observer = new IntersectionObserver(
+            (entries) => entries.forEach((entry) => {
+                if (entry.isIntersecting) setActiveSection(entry.target.id);
+            }),
+            { rootMargin: '-92px 0px -55% 0px', threshold: 0 }
+        );
+        sections.forEach((section) => observer.observe(section));
+        return () => observer.disconnect();
+    }, [scrolledPast]);
+
     if (scrolledPast) {
         const scrollToSection = (event, sectionId) => {
             event.preventDefault();
@@ -27,10 +44,10 @@ export const Header = ({ scrolledPast = false }) => {
         return (
             <header className="scrolled-listing-header">
                 <nav className="scrolled-listing-nav" aria-label="Listing sections">
-                    <a className="scrolled-listing-nav__active" href="#photos" onClick={(event) => scrollToSection(event, 'photos')}>Photos</a>
-                    <a href="#amenities" onClick={(event) => scrollToSection(event, 'amenities')}>Amenities</a>
-                    <a href="#reviews" onClick={(event) => scrollToSection(event, 'reviews')}>Reviews</a>
-                    <a href="#location" onClick={(event) => scrollToSection(event, 'location')}>Location</a>
+                    <a className={activeSection === 'photos' ? 'scrolled-listing-nav__active' : ''} href="#photos" onClick={(event) => scrollToSection(event, 'photos')}>Photos</a>
+                    <a className={activeSection === 'amenities' ? 'scrolled-listing-nav__active' : ''} href="#amenities" onClick={(event) => scrollToSection(event, 'amenities')}>Amenities</a>
+                    <a className={activeSection === 'reviews' ? 'scrolled-listing-nav__active' : ''} href="#reviews" onClick={(event) => scrollToSection(event, 'reviews')}>Reviews</a>
+                    <a className={activeSection === 'location' ? 'scrolled-listing-nav__active' : ''} href="#location" onClick={(event) => scrollToSection(event, 'location')}>Location</a>
                 </nav>
                 <div className="scrolled-listing-actions">
                     <div className="scrolled-listing-summary">

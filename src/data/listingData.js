@@ -212,16 +212,123 @@ Located just 5 minutes from Candolim Beach, fine dining restaurants, and bustlin
     ],
 
     amenities: [
-        { id: '1', name: 'Private romantic Jacuzzi', category: 'Bathroom' },
-        { id: '2', name: 'Fast Wi-Fi – 150 Mbps', category: 'Internet & office' },
-        { id: '3', name: 'Shared outdoor swimming pool', category: 'Facilities' },
-        { id: '4', name: 'Dedicated workspace', category: 'Internet & office' },
-        { id: '5', name: 'Free driveway parking on premises', category: 'Parking' },
-        { id: '6', name: '55" HDTV with Netflix & Prime', category: 'Entertainment' },
-        { id: '7', name: 'Full split-system Air conditioning', category: 'Heating & cooling' },
-        { id: '8', name: 'Fully equipped kitchen with microwave', category: 'Kitchen & dining' },
-        { id: '9', name: 'Washing machine in unit', category: 'Laundry' },
-        { id: '10', name: 'Self check-in with smart keypad', category: 'Services' }
+        { id: '1', name: 'Private romantic Jacuzzi', category: 'Bathroom', icon: 'hottub' },
+        { id: '2', name: 'Fast Wi-Fi – 150 Mbps', category: 'Internet & office', icon: 'wifi' },
+        { id: '3', name: 'Shared outdoor swimming pool', category: 'Parking and facilities', icon: 'pool' },
+        { id: '4', name: 'Dedicated workspace', category: 'Internet & office', icon: 'workspace' },
+        { id: '5', name: 'Free driveway parking on premises', category: 'Parking and facilities', icon: 'parking' },
+        { id: '6', name: 'TV', category: 'Entertainment', icon: 'tv' },
+        { id: '7', name: 'Air conditioning', category: 'Heating & cooling', icon: 'ac' },
+        { id: '8', name: 'Kitchen', category: 'Kitchen & dining', icon: 'kitchen' },
+        { id: '9', name: 'Washing machine', category: 'Bedroom and laundry', icon: 'washer' },
+        { id: '10', name: 'Self check-in', category: 'Services', icon: 'keypad' }
+    ],
+
+    amenityCategories: [
+        {
+            category: 'Bathroom',
+            items: [
+                { id: 'b-1', name: 'Hairdryer', icon: 'hairdryer' },
+                { id: 'b-2', name: 'Cleaning products', icon: 'cleaning' },
+                { id: 'b-3', name: 'Shampoo', icon: 'shampoo' },
+                { id: 'b-4', name: 'Hot water', icon: 'hotwater' },
+                { id: 'b-5', name: 'Shower gel', icon: 'showergel' }
+            ]
+        },
+        {
+            category: 'Bedroom and laundry',
+            items: [
+                { id: 'bl-1', name: 'Washing machine', icon: 'washer' },
+                { id: 'bl-2', name: 'Hangers', icon: 'hangers' },
+                { id: 'bl-3', name: 'Bed linen', icon: 'bedlinen' },
+                { id: 'bl-4', name: 'Room-darkening blinds', icon: 'blinds' },
+                { id: 'bl-5', name: 'Iron', icon: 'iron' },
+                { id: 'bl-6', name: 'Clothes storage', icon: 'wardrobe' },
+                { id: 'bl-7', name: 'Cot', icon: 'crib' }
+            ]
+        },
+        {
+            category: 'Entertainment',
+            items: [
+                { id: 'e-1', name: 'TV', icon: 'tv' }
+            ]
+        },
+        {
+            category: 'Family',
+            items: [
+                { id: 'f-1', name: 'Cot', icon: 'crib' }
+            ]
+        },
+        {
+            category: 'Heating and cooling',
+            items: [
+                { id: 'hc-1', name: 'Air conditioning', icon: 'ac' },
+                { id: 'hc-2', name: 'Ceiling fan', icon: 'fan' }
+            ]
+        },
+        {
+            category: 'Home safety',
+            items: [
+                { id: 'hs-1', name: 'Exterior security cameras on property', icon: 'camera' },
+                { id: 'hs-2', name: 'Carbon monoxide alarm', icon: 'co-alarm' },
+                { id: 'hs-3', name: 'Smoke alarm', icon: 'smoke-alarm' }
+            ]
+        },
+        {
+            category: 'Internet and office',
+            items: [
+                { id: 'io-1', name: 'Wifi', icon: 'wifi' },
+                { id: 'io-2', name: 'Dedicated workspace', icon: 'workspace' }
+            ]
+        },
+        {
+            category: 'Kitchen and dining',
+            items: [
+                { id: 'kd-1', name: 'Kitchen', icon: 'kitchen' },
+                { id: 'kd-2', name: 'Fridge', icon: 'fridge' },
+                { id: 'kd-3', name: 'Freezer', icon: 'freezer' },
+                { id: 'kd-4', name: 'Microwave', icon: 'microwave' },
+                { id: 'kd-5', name: 'Cooking basics', icon: 'cooking' },
+                { id: 'kd-6', name: 'Crockery and cutlery', icon: 'cutlery' },
+                { id: 'kd-7', name: 'Kettle', icon: 'kettle' },
+                { id: 'kd-8', name: 'Coffee', icon: 'coffee' },
+                { id: 'kd-9', name: 'Wine glasses', icon: 'wine' },
+                { id: 'kd-10', name: 'Toaster', icon: 'toaster' },
+                { id: 'kd-11', name: 'Blender', icon: 'blender' },
+                { id: 'kd-12', name: 'Cooker', icon: 'stove' }
+            ]
+        },
+        {
+            category: 'Location features',
+            items: [
+                { id: 'lf-1', name: 'Private entrance', icon: 'door' }
+            ]
+        },
+        {
+            category: 'Outdoor',
+            items: [
+                { id: 'o-1', name: 'Patio or balcony', icon: 'balcony' },
+                { id: 'o-2', name: 'Outdoor dining area', icon: 'outdoor-dining' }
+            ]
+        },
+        {
+            category: 'Parking and facilities',
+            items: [
+                { id: 'pf-1', name: 'Free parking on premises', icon: 'parking' },
+                { id: 'pf-2', name: 'Pool', icon: 'pool' },
+                { id: 'pf-3', name: 'Hot tub', icon: 'hottub' },
+                { id: 'pf-4', name: 'Gym', icon: 'gym' }
+            ]
+        },
+        {
+            category: 'Services',
+            items: [
+                { id: 's-1', name: 'Pets allowed', icon: 'pets' },
+                { id: 's-2', name: 'Cleaning available during stay', icon: 'cleaning-service' },
+                { id: 's-3', name: 'Long-term stays allowed', icon: 'calendar' },
+                { id: 's-4', name: 'Self check-in', icon: 'keypad' }
+            ]
+        }
     ],
 
     ratingCategories: [

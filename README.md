@@ -1,4 +1,31 @@
-# React + Vite
+# Airbnb Listing Clone
+
+This project recreates a desktop Airbnb listing experience with a listing page, Photo Tour, accessible Lightbox, reviews, map, host details, and a nearby stays carousel.
+
+## Run locally
+
+```bash
+npm install
+npm run dev
+```
+
+The Photo Tour is available from the listing's `Show all photos` button and at `/photo-tour`.
+
+## Validation
+
+```bash
+npm run build
+npm run lint
+```
+
+## Submission artifacts
+
+- [Architecture diagram](architecture-diagram.svg)
+- [Architecture notes](ARCHITECTURE.md)
+- [AI prompt sequence](AI_PROMPTS.md)
+- [Agent configuration](AGENTS.md)
+
+## Vite template notes
 
 This template provides a minimal setup to get React working in Vite with HMR and some Oxlint rules.
 
