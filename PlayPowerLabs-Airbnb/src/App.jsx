@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import './App.css';
 import { Header } from "./components/Header";
 import { PropertyHeader } from "./components/PropertyHeader";
@@ -33,8 +33,6 @@ function App() {
     setIsPhotoTourRoute(false);
     window.scrollTo(0, 0);
   };
-
-  const openLightbox = (index) => setLightboxIndex(index);
 
   useEffect(() => {
     const handlePopState = () => {
