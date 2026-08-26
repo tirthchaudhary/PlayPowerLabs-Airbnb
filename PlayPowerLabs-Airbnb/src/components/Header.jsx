@@ -1,27 +1,84 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 
 export const Header = ({ scrolledPast = false }) => {
+    const [activeSection, setActiveSection] = useState('photos');
+
+    useEffect(() => {
+        if (!scrolledPast) return undefined;
+        const sections = ['photos', 'amenities', 'reviews', 'location']
+            .map((id) => document.getElementById(id))
+            .filter(Boolean);
+        const observer = new IntersectionObserver(
+            (entries) => entries.forEach((entry) => {
+                if (entry.isIntersecting) setActiveSection(entry.target.id);
+            }),
+            { rootMargin: '-92px 0px -55% 0px', threshold: 0 }
+        );
+        sections.forEach((section) => observer.observe(section));
+        return () => observer.disconnect();
+    }, [scrolledPast]);
+
+    if (scrolledPast) {
+        const scrollToSection = (event, sectionId) => {
+            event.preventDefault();
+            const section = document.getElementById(sectionId);
+            if (!section) return;
+
+            const start = window.scrollY;
+            const target = section.getBoundingClientRect().top + start - 92;
+            const distance = target - start;
+            const duration = 260;
+            const startedAt = performance.now();
+
+            const animate = (now) => {
+                const progress = Math.min((now - startedAt) / duration, 1);
+                const easedProgress = 1 - Math.pow(1 - progress, 3);
+                window.scrollTo(0, start + distance * easedProgress);
+                if (progress < 1) requestAnimationFrame(animate);
+            };
+
+            window.history.replaceState({}, '', `#${sectionId}`);
+            requestAnimationFrame(animate);
+        };
+
+        return (
+            <header className="scrolled-listing-header">
+                <nav className="scrolled-listing-nav" aria-label="Listing sections">
+                    <a className={activeSection === 'photos' ? 'scrolled-listing-nav__active' : ''} href="#photos" onClick={(event) => scrollToSection(event, 'photos')}>Photos</a>
+                    <a className={activeSection === 'amenities' ? 'scrolled-listing-nav__active' : ''} href="#amenities" onClick={(event) => scrollToSection(event, 'amenities')}>Amenities</a>
+                    <a className={activeSection === 'reviews' ? 'scrolled-listing-nav__active' : ''} href="#reviews" onClick={(event) => scrollToSection(event, 'reviews')}>Reviews</a>
+                    <a className={activeSection === 'location' ? 'scrolled-listing-nav__active' : ''} href="#location" onClick={(event) => scrollToSection(event, 'location')}>Location</a>
+                </nav>
+                <div className="scrolled-listing-actions">
+                    <div className="scrolled-listing-summary">
+                        <strong>₹28,499 <span>for 5 nights</span></strong>
+                        <span>★ 4.95 · 19 reviews</span>
+                    </div>
+                    <button className="scrolled-reserve-button">Reserve</button>
+                </div>
+            </header>
+        );
+    }
+
     return (
         <header style={{
             width: '100%',
-            height: '96px',
+            height: '80px',
             borderBottom: '1px solid #EBEBEB',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'space-between',
-            padding: '0 80px',
-            // When scrolled past hero: fixed + fade in. Otherwise: static (scrolls with page).
-            position: scrolledPast ? 'fixed' : 'static',
+            padding: '0 100px',
+            position: 'static',
             top: 0,
             left: 0,
             right: 0,
             backgroundColor: '#FFFFFF',
             zIndex: 100,
-            opacity: scrolledPast ? 1 : 1,
-            transform: scrolledPast ? 'translateY(0)' : 'translateY(0)',
-            animation: scrolledPast ? 'headerFadeIn 0.3s ease forwards' : 'none',
+            opacity: 1,
+            transform: 'translateY(0)',
+            animation: 'none',
         }}>
-            {/* 1. Airbnb Brand Logo */}
             {/* 1. Official Airbnb Brand Logo */}
             {/* Official Airbnb Brand Logo Image */}
             <div style={{ display: 'flex', alignItems: 'center', cursor: 'pointer' }}>
@@ -35,10 +92,9 @@ export const Header = ({ scrolledPast = false }) => {
 
 
             {/* 2. Center Search Pill */}
-            <div style={{
+                <div className="opening-search-pill" style={{
                 display: 'flex',
                 alignItems: 'center',
-                height: '52px',
                 border: '1px solid #DDDDDD',
                 borderRadius: '40px',
                 padding: '6px 8px 6px 18px',

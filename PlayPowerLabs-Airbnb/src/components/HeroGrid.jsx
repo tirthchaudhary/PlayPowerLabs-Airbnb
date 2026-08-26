@@ -17,6 +17,9 @@ export const HeroGrid = ({ photos, onOpenPhotoTour, onOpenLightbox }) => {
                 {/* Left 50%: Main Hero Image */}
                 <div
                     onClick={() => onOpenLightbox && onOpenLightbox(0)}
+                    onKeyDown={(event) => { if (event.key === 'Enter' || event.key === ' ') { event.preventDefault(); if (onOpenLightbox) onOpenLightbox(0); } }}
+                    role="button"
+                    tabIndex={0}
                     style={{ position: 'relative', height: '100%', cursor: 'pointer', overflow: 'hidden' }}
                     className="hero-image-wrapper"
                 >
@@ -33,6 +36,9 @@ export const HeroGrid = ({ photos, onOpenPhotoTour, onOpenLightbox }) => {
                         <div
                             key={photo.id || index}
                             onClick={() => onOpenLightbox && onOpenLightbox(index + 1)}
+                            onKeyDown={(event) => { if (event.key === 'Enter' || event.key === ' ') { event.preventDefault(); if (onOpenLightbox) onOpenLightbox(index + 1); } }}
+                            role="button"
+                            tabIndex={0}
                             style={{ position: 'relative', height: '100%', cursor: 'pointer', overflow: 'hidden' }}
                             className="hero-image-wrapper"
                         >
