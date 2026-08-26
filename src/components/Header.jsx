@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import airbnbLogo from '../assets/airbnb-logo.svg';
 
 export const Header = ({ scrolledPast = false }) => {
     const [activeSection, setActiveSection] = useState('photos');
@@ -83,7 +84,7 @@ export const Header = ({ scrolledPast = false }) => {
             {/* Official Airbnb Brand Logo Image */}
             <div style={{ display: 'flex', alignItems: 'center', cursor: 'pointer' }}>
                 <img
-                    src="https://upload.wikimedia.org/wikipedia/commons/6/69/Airbnb_Logo_B%C3%A9lo.svg"
+                    src={airbnbLogo}
                     alt="Airbnb logo"
                     style={{ height: '32px', width: 'auto', objectFit: 'contain' }}
                 />
