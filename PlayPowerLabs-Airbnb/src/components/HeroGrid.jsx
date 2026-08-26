@@ -1,6 +1,6 @@
 import React from 'react';
 
-export const HeroGrid = ({ photos, onOpenPhotoTour, onOpenLightbox }) => {
+export const HeroGrid = ({ photos, onOpenPhotoTour }) => {
     const mainHero = photos[0];
     const gridHeroes = photos.slice(1, 5);
 
@@ -16,12 +16,13 @@ export const HeroGrid = ({ photos, onOpenPhotoTour, onOpenLightbox }) => {
             }}>
                 {/* Left 50%: Main Hero Image */}
                 <div
-                    onClick={() => onOpenLightbox && onOpenLightbox(0)}
-                    onKeyDown={(event) => { if (event.key === 'Enter' || event.key === ' ') { event.preventDefault(); if (onOpenLightbox) onOpenLightbox(0); } }}
+                    onClick={() => onOpenPhotoTour && onOpenPhotoTour(mainHero?.category || 'living-1')}
+                    onKeyDown={(event) => { if (event.key === 'Enter' || event.key === ' ') { event.preventDefault(); if (onOpenPhotoTour) onOpenPhotoTour(mainHero?.category || 'living-1'); } }}
                     role="button"
                     tabIndex={0}
                     style={{ position: 'relative', height: '100%', cursor: 'pointer', overflow: 'hidden' }}
                     className="hero-image-wrapper"
+                    aria-label={`View photo tour - ${mainHero?.roomName || 'Living room'}`}
                 >
                     <img
                         src={mainHero?.url}
@@ -35,12 +36,13 @@ export const HeroGrid = ({ photos, onOpenPhotoTour, onOpenLightbox }) => {
                     {gridHeroes.map((photo, index) => (
                         <div
                             key={photo.id || index}
-                            onClick={() => onOpenLightbox && onOpenLightbox(index + 1)}
-                            onKeyDown={(event) => { if (event.key === 'Enter' || event.key === ' ') { event.preventDefault(); if (onOpenLightbox) onOpenLightbox(index + 1); } }}
+                            onClick={() => onOpenPhotoTour && onOpenPhotoTour(photo.category)}
+                            onKeyDown={(event) => { if (event.key === 'Enter' || event.key === ' ') { event.preventDefault(); if (onOpenPhotoTour) onOpenPhotoTour(photo.category); } }}
                             role="button"
                             tabIndex={0}
                             style={{ position: 'relative', height: '100%', cursor: 'pointer', overflow: 'hidden' }}
                             className="hero-image-wrapper"
+                            aria-label={`View photo tour - ${photo.roomName || photo.category}`}
                         >
                             <img
                                 src={photo.url}
