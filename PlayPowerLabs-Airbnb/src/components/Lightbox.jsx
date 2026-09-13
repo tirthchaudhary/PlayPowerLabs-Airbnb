@@ -9,6 +9,8 @@ export function Lightbox({ photos, activeIndex, onClose, onChange }) {
   const activeIndexRef = useRef(activeIndex);
   const photo = photos[activeIndex];
 
+  const lightboxRef = useRef(null);
+
   useEffect(() => {
     activeIndexRef.current = activeIndex;
   }, [activeIndex]);
@@ -24,7 +26,7 @@ export function Lightbox({ photos, activeIndex, onClose, onChange }) {
       if (event.key === 'ArrowLeft') onChange((activeIndexRef.current - 1 + photos.length) % photos.length);
       if (event.key === 'ArrowRight') onChange((activeIndexRef.current + 1) % photos.length);
       if (event.key === 'Tab') {
-        const focusable = [...document.querySelectorAll('.lightbox button')];
+        const focusable = [...lightboxRef.current.querySelectorAll('button')];
         const first = focusable[0];
         const last = focusable[focusable.length - 1];
         if (event.shiftKey && document.activeElement === first) {
@@ -48,7 +50,7 @@ export function Lightbox({ photos, activeIndex, onClose, onChange }) {
   if (!photo) return null;
 
   return (
-    <div className="lightbox" role="dialog" aria-modal="true" aria-label="Photo viewer" onClick={onClose}>
+    <div ref={lightboxRef} className="lightbox" role="dialog" aria-modal="true" aria-label="Photo viewer" onClick={onClose}>
       <div className="lightbox-toolbar">
         <span>{activeIndex + 1} / {photos.length}</span>
         <button ref={closeButtonRef} onClick={onClose} aria-label="Close photo viewer"><CloseIcon /></button>
