@@ -59,7 +59,6 @@ function App() {
     return () => observer.disconnect();
   }, []);
 
-
   return (
     <div style={{ minHeight: '100vh', backgroundColor: '#FFFFFF' }}>
       {isPhotoTourRoute ? (
@@ -69,28 +68,26 @@ function App() {
           initialCategory={initialTourCategory}
         />
       ) : <>
-      {/* Full Width Navbar */}
-      <Header scrolledPast={headerVisible} />
+        {/* Full Width Navbar */}
+        <Header scrolledPast={headerVisible} />
 
-      {/* Main Listing Container */}
-      <main style={{ maxWidth: '1120px', margin: '0 auto', padding: '0 24px' }}>
-        {/* Spacer: fills header height when it becomes fixed so content doesn't jump */}
-        {headerVisible && <div style={{ height: '80px' }} aria-hidden="true" />}
-        {/* Title, Share & Save Bar */}
-        <PropertyHeader property={mockListing} />
-
-        {/* 5-Photo Gallery Grid — observed for scroll-aware header */}
-        <div id="photos" ref={heroRef}>
-          <HeroGrid
-            photos={mockListing.photos}
-            onOpenPhotoTour={openPhotoTour}
-          />
-        </div>
-
-        {/* Listing information and booking panel */}
-        <ListingDetails onOpenPhotoTour={openPhotoTour} />
-      </main>
-      {lightboxIndex !== null && <Lightbox photos={mockListing.photos} activeIndex={lightboxIndex} onClose={() => setLightboxIndex(null)} onChange={setLightboxIndex} />}
+        {/* Main Listing Container */}
+        <main style={{ maxWidth: '1120px', margin: '0 auto', padding: '0 24px' }}>
+          {/* Spacer: fills header height when it becomes fixed so content doesn't jump */}
+          {headerVisible && <div style={{ height: '80px' }} aria-hidden="true" />}
+          {/* Title, Share & Save Bar */}
+          <PropertyHeader property={mockListing} />
+          {/* 5-Photo Gallery Grid — observed for scroll-aware header */}
+          <div id="photos" ref={heroRef}>
+            <HeroGrid
+              photos={mockListing.photos}
+              onOpenPhotoTour={openPhotoTour}
+            />
+          </div>
+          {/* Listing information and booking panel */}
+          <ListingDetails onOpenPhotoTour={openPhotoTour} />
+        </main>
+        {lightboxIndex !== null && <Lightbox photos={mockListing.photos} activeIndex={lightboxIndex} onClose={() => setLightboxIndex(null)} onChange={setLightboxIndex} />}
       </>}
     </div>
   );
